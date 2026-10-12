@@ -1,0 +1,15 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We tested the intuition that attention is more diffuse when a language model hallucinates.
+On closed-book short-answer QA with two open-weight models and five knowledge domains, hallucinated answers do not show 15--30\% higher late-layer attention entropy; they show slightly lower entropy, about 2--6\% after we control for domain and length.
+A layer-wise entropy classifier reaches about 0.82 AUROC pooled, but only 0.62 to 0.89 within a domain, and it stays below a simple token-likelihood baseline.
+Science is the hardest domain as predicted; biography is not the easiest.
+
+The main takeaway is methodological: on mixed-domain data, a feature that encodes the domain can pass for a hallucination detector, so evaluations should report a domain-only baseline and within-domain results.
+
+Several follow-ups would sharpen these conclusions.
+Drawing all domains from one source, or matching question templates, would break the confound between domain and dataset.
+Long-form generation with claim-level labels would test entropy during generation where it is a richer signal.
+Per-head features recover about 0.10 AUROC over per-layer means, so identifying which heads carry the signal, and whether they are the same heads across domains, is a natural next step.
+Finally, restricting entropy to subject or question tokens and relabeling science with a stronger judge or human annotation would address two limitations of the current study.

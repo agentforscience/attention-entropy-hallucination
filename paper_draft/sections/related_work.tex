@@ -1,0 +1,27 @@
+\section{Related Work}
+\label{sec:related}
+
+\para{Output-distribution uncertainty.}
+A first family of detectors reads uncertainty from the output distribution.
+Token likelihood and predictive entropy need one forward pass, while semantic entropy \citep{kuhn2023semantic} and SelfCheckGPT \citep{manakul2023selfcheckgpt} compare several sampled responses.
+These methods use logits or samples, not attention.
+We use token-likelihood statistics from the same forward pass as our main baseline, because they are the cheapest alternative to an attention-based signal.
+
+\para{Hidden-state probes.}
+A second family trains probes on internal activations.
+SAPLMA trains a classifier on hidden states to predict truthfulness \citep{azaria2023internal}, INSIDE scores the consistency of internal representations across samples \citep{chen2024inside}, and \citet{orgad2025llms} study where correctness information sits in the residual stream.
+Unlike these methods, we restrict the detector to a scalar summary of each attention row, which tests a specific and interpretable claim rather than whatever a probe can extract.
+
+\para{Attention-based detectors.}
+The closest work uses attention maps directly, but with statistics other than entropy.
+Lookback Lens classifies contextual hallucinations in retrieval-augmented settings from the per-head ratio of attention on context versus generated tokens \citep{chuang2024lookback}.
+LLM-Check scores attention kernels \citep{sriramanan2024llmcheck}.
+\citet{yuksekgonul2024attention} relate factual errors to the attention mass placed on constraint tokens.
+Building on this line, we isolate the simplest version of the idea, that attention is more diffuse when the model hallucinates, and test it with explicit length and domain controls.
+Our finding that per-head features do much better than per-layer averages fits the head-level design of Lookback Lens.
+
+\para{Data and evaluation.}
+We draw questions from \popqa \citep{mallen2023popqa}, \sciq \citep{welbl2017sciq}, and \triviaqa \citep{joshi2017triviaqa}.
+Because these sources differ in question style and in how often models answer correctly, we treat the source of a question as a confound to measure rather than ignore.
+
+We did not run a systematic literature search for this study; this section covers the work we are aware of and is not exhaustive.

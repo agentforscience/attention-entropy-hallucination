@@ -1,0 +1,41 @@
+domain,question,answer,gold,judge
+biography,Who is the father of John Donkin?,John Donkin Sr.,['Bryan Donkin'],CORRECT
+biography,Who is the father of Alfred Jefferis Turner?,Frederick Turner,['Frederick Storrs Turner'],CORRECT
+biography,"What is Tyler, the Creator's occupation?","Rapper, musician, producer","['record producer', 'music producer', 'actor']",CORRECT
+biography,What is Johann Heinrich Lambert's occupation?,Mathematician and philosopher,"['astronomer', 'physicist', 'mathematician']",INCORRECT
+biography,Who is the father of T. S. Eliot?,Henry Eliot,['Henry Ware Eliot'],CORRECT
+biography,Who is the father of Coastal?,"Coastal is not a person, so it doesn't have a father.",['Majestic Prince'],CORRECT
+biography,What is Ayumi Hamasaki's occupation?,Singer,"['actor', 'actress', 'actors']",CORRECT
+biography,Who is the mother of Lulach?,Gruoch,"['Gruoch of Scotland', 'Gruoch mi Boedhe']",CORRECT
+creative_works,Who was the screenwriter for The Descendants?,Alexander Payne,"['Nat Faxon', 'Nathaniel Faxon', 'Alexander Payne']",INCORRECT
+creative_works,Who was the director of Hollywood?,"Hollywood is not a person, it's an area.",['James Cruze'],CORRECT
+creative_works,Who was the screenwriter for The Piano Teacher?,Michael Haneke,"['Elfriede Jelinek', 'Michael Haneke']",INCORRECT
+creative_works,Who is the author of Tanya?,Rabbi Schneur Zalman of Liadi,"['Shneur Zalman of Liadi', 'Rabbi Shneur Zalman of Liadi', 'Alter Rebbe']",CORRECT
+creative_works,Who was the composer of Frozen?,Christina Aguilera and Robert Lopez,"['Christophe Beck', 'Jean-Christophe Beck', 'Robert Lopez']",INCORRECT
+creative_works,Who is the author of Stand By Your Screen?,TBD,['Roy Minton'],CORRECT
+creative_works,Who was the director of Laptop?,N/A,['Rupesh Paul'],CORRECT
+creative_works,Who is the author of Wired?,"Wired has multiple contributors, no single author.","['Bob Woodward', 'Robert Upshur Woodward', 'Robert Woodward']",CORRECT
+geography,What is the capital of South Africa?,Cape Town,"['Bloemfontein', 'Pretoria', 'Pretoria, S. Africa']",INCORRECT
+geography,What is the capital of South Africa?,Cape Town,"['Bloemfontein', 'Pretoria', 'Pretoria, S. Africa']",INCORRECT
+geography,What is the capital of Emirate of Dubai?,Dubai does not have a separate capital; Dubai City is considered the capital of the Emirate of Dubai.,['Dubai'],INCORRECT
+geography,What is Rome the capital of?,Italy,"['Lazio', 'Province of Rome', 'provincia di Roma']",INCORRECT
+geography,What is the capital of City of Melbourne?,Melbourne,"['Melbourne City Centre', 'Melbourne CBD', 'Melbourne, Victoria']",CORRECT
+geography,What is Florence the capital of?,Italy,"['Tuscany', 'Toscana', 'Republic of Florence']",INCORRECT
+geography,In what country is Leipzig–Dresden Railway Company?,Germany,"['Kingdom of Saxony', 'Saxony']",CORRECT
+geography,What is the capital of Adyghe Autonomous Oblast?,Maikop,"['Krasnodar', 'Yekaterinodar', 'Katerynodar']",CORRECT
+science,What can water's high surface tension be attributed t?,Hydrogen bonding,['polar molecules sticking together'],CORRECT
+science,What type of earthquake creates a tsunami?,Submarine earthquake,['underwater'],CORRECT
+science,The lunar landscape is covered by craters caused by what?,Meteorites,['asteroid impacts'],CORRECT
+science,Adding a solute does what to the boiling point of a pure solvent?,Raises,['increases it'],CORRECT
+science,What helps push the fetus from the uterus during birth?,Contraction of uterine muscles,['contractions'],CORRECT
+science,What is the term for the process in which an area that has never before been colonized changes through time?,Succession,['ecological succession'],CORRECT
+science,Which factor causes a cannon ball to move horizontally and then fall on the ground?,Gravity,['projectile motion'],CORRECT
+science,"Proto-oncogenes are positive cell-cycle regulators but when mutated, they can become what?",Oncogenes,['oncogenes and cause cancer'],CORRECT
+trivia,"The first civilians executed for espionage in the United States for passing atomic bomb secrets to the Soviets, what couple were given the electric chair in 1953?",Klaus Fuchs and Ethel Rosenberg,"['Julius and Ethel Rosenberg', 'Ethel Greenglass Rosenburg', 'Julius rosenburg']",INCORRECT
+trivia,What would a polyandric woman have more than one of?,husbands,"['HUSBAND', 'The Husband']",CORRECT
+trivia,The city of Leeds stands on which river?,River Aire,"['AIRE', 'Autoimmune regulator', 'Autoimmune Regulator']",INCORRECT
+trivia,Amal Clooney is an internationally renowned?,lawyer,"['Human rights lawyer', 'Human rights law', 'International Human Rights Law']",CORRECT
+trivia,Who is the valet to 'Phileas Fogg' in the novel 'Around The World In Eighty Days'?,Passepartout,"[""'JEAN PASSEPARTOUT'"", 'Jean Passepartout', 'Passepartout (character)']",CORRECT
+trivia,"Author Alex Haley, born on Aug 11, 1921, wrote what epic story of his family origins, later to be made a rather popular mini-series?",Roots,"['Roots: The Saga of an American Family', 'Roots (book)', 'Roots (novel)']",CORRECT
+trivia,Which train is the holder of the world speed record for steam locomotives?,LNER Class A4 No. 4468,"['Mallard', 'Mallard Duck', 'Mallards']",CORRECT
+trivia,"If North is 0 and 360 degrees and East is 90 degrees, how many degrees is South-West?",225,"['225 degrees', 'two hundred and twenty-five  degrees']",CORRECT

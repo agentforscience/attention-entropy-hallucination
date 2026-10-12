@@ -1,0 +1,20 @@
+\begin{table}[t]
+    \centering
+    \caption{Data. Each domain has 1,500 questions (seed 42). The hallucination rate is the share of non-abstaining answers labeled wrong; it ranges from 23\% to 94\% across domains, which is the source of the domain confound in \secref{sec:h2}.}
+    \label{tab:data}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}llcc@{}}
+        \toprule
+        & & \multicolumn{2}{c}{\textbf{Hallucination rate}} \\
+        \cmidrule(lr){3-4}
+        \textbf{Domain} & \textbf{Source} & \qwen & \llama \\
+        \midrule
+        biography & \popqa: occupation, place of birth, father, mother & 0.77 & 0.64 \\
+        geography & \popqa: country, capital, capital of & 0.38 & 0.33 \\
+        creative works & \popqa: author, director, producer, screenwriter, composer & 0.94 & 0.80 \\
+        science & \sciq (train split, question only) & 0.23 & 0.27 \\
+        trivia & \triviaqa (rc.nocontext validation) & 0.42 & 0.25 \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}

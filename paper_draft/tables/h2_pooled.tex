@@ -1,0 +1,30 @@
+\begin{table}[t]
+    \centering
+    \caption{\Htwo: classifiers trained on all domains pooled. \emph{Pooled} is the AUROC of out-of-fold scores with a 95\% bootstrap CI; \emph{Within} is the mean over the five domains of the AUROC of the same scores computed inside each domain. A domain indicator alone reaches 0.785 / 0.723 pooled, so pooled numbers overstate every detector. Best result per column in \textbf{bold}.}
+    \label{tab:h2}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}lcccc@{}}
+        \toprule
+        & \multicolumn{2}{c}{\qwen} & \multicolumn{2}{c}{\llama} \\
+        \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+        \textbf{Features} & Pooled & Within & Pooled & Within \\
+        \midrule
+        \multicolumn{5}{@{}l}{\emph{Controls}} \\
+        domain indicator only & 0.785 \ci{0.774}{0.796} & 0.429 & 0.723 \ci{0.711}{0.736} & 0.423 \\
+        length only & 0.669 \ci{0.657}{0.681} & 0.527 & 0.652 \ci{0.639}{0.664} & 0.535 \\
+        \midrule
+        \multicolumn{5}{@{}l}{\emph{Attention entropy}} \\
+        final-3-layer mean (1 feature) & 0.700 \ci{0.688}{0.711} & 0.539 & 0.731 \ci{0.720}{0.742} & 0.638 \\
+        layer-wise, answer mean (primary) & 0.827 \ci{0.817}{0.836} & 0.719 & 0.817 \ci{0.807}{0.826} & 0.740 \\
+        layer-wise, first answer token & 0.826 \ci{0.816}{0.835} & 0.683 & 0.821 \ci{0.812}{0.830} & 0.743 \\
+        layer-wise, length-normalized & 0.826 \ci{0.817}{0.835} & 0.718 & 0.815 \ci{0.806}{0.825} & 0.740 \\
+        layer-wise + length & 0.833 \ci{0.824}{0.842} & 0.727 & 0.822 \ci{0.813}{0.831} & 0.747 \\
+        per-head ($L \times H$ features) & 0.890 \ci{0.883}{0.898} & 0.821 & 0.874 \ci{0.867}{0.882} & 0.830 \\
+        \midrule
+        \multicolumn{5}{@{}l}{\emph{Token likelihood}} \\
+        logit baseline & 0.876 \ci{0.868}{0.884} & 0.812 & 0.878 \ci{0.870}{0.886} & 0.847 \\
+        layer-wise entropy + logit & {\bf 0.891} \ci{0.884}{0.899} & {\bf 0.823} & {\bf 0.890} \ci{0.883}{0.898} & {\bf 0.854} \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}

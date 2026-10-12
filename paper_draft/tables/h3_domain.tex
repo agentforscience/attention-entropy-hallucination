@@ -1,0 +1,24 @@
+\begin{table}[t]
+    \centering
+    \caption{\Hthree: AUROC of classifiers trained and cross-validated inside each domain. The entropy rows carry 95\% bootstrap CIs. Science is the lowest domain for layer-wise entropy in both models; biography is third. Best domain per row in \textbf{bold}.}
+    \label{tab:h3}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}llcccccc@{}}
+        \toprule
+        & \textbf{Features} & biography & geography & creative works & science & trivia & mean \\
+        \midrule
+        \multirow{4}{*}{\qwen}
+        & layer-wise entropy & 0.747 \ci{0.716}{0.775} & 0.802 \ci{0.777}{0.824} & {\bf 0.892} \ci{0.857}{0.922} & 0.616 \ci{0.581}{0.648} & 0.711 \ci{0.684}{0.736} & 0.753 \\
+        & length only & 0.507 & 0.599 & 0.552 & 0.546 & 0.593 & 0.559 \\
+        & logit baseline & 0.781 & 0.800 & {\bf 0.911} & 0.728 & 0.853 & 0.815 \\
+        & entropy + logit & 0.810 & 0.860 & {\bf 0.932} & 0.730 & 0.839 & 0.834 \\
+        \midrule
+        \multirow{4}{*}{\llama}
+        & layer-wise entropy & 0.742 \ci{0.713}{0.768} & {\bf 0.831} \ci{0.808}{0.851} & 0.820 \ci{0.792}{0.846} & 0.694 \ci{0.664}{0.722} & 0.741 \ci{0.711}{0.769} & 0.765 \\
+        & length only & 0.423 & {\bf 0.655} & 0.633 & 0.584 & 0.491 & 0.557 \\
+        & logit baseline & 0.827 & 0.853 & {\bf 0.885} & 0.792 & 0.879 & 0.847 \\
+        & entropy + logit & 0.845 & 0.877 & {\bf 0.896} & 0.813 & 0.883 & 0.863 \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}

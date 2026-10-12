@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-10-09T17:31:25.766006Z",
+  "stages": {
+    "resource_finder": {
+      "status": "completed",
+      "completed_at": "2026-10-09T17:31:25.791897Z",
+      "success": true,
+      "outputs": {
+        "skipped": true
+      }
+    },
+    "experiment_runner": {
+      "status": "completed",
+      "started_at": "2026-10-09T17:31:25.803359Z",
+      "completed_at": "2026-10-09T19:52:47.340193Z",
+      "success": true,
+      "outputs": {
+        "success": true,
+        "return_code": 0,
+        "elapsed_time": 8481.419219970703,
+        "log_file": "/data/summereunann/neurico-workspaces/attention_entropy_as_a_predict_20261009_122941_09c30af8/logs/execution_claude.log",
+        "transcript_file": "/data/summereunann/neurico-workspaces/attention_entropy_as_a_predict_20261009_122941_09c30af8/logs/execution_claude_transcript.jsonl",
+        "background_processes_terminated": false
+      }
+    }
+  },
+  "current_stage": null,
+  "completed": true,
+  "completed_at": "2026-10-09T19:52:47.844550Z"
+}

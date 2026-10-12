@@ -1,0 +1,40 @@
+\section{Introduction}
+\label{sec:intro}
+
+Large language models state wrong facts in the same fluent register as right ones.
+A detector that flags these errors is most useful when it is cheap enough to run on every response, which rules out methods that need several samples or an external knowledge source.
+Attention maps are a natural candidate: the model computes them anyway, so any signal they carry costs nothing beyond a single forward pass.
+
+A simple and appealing intuition says what that signal should look like.
+When a model has the relevant fact, its attention locks onto the tokens that matter; when it does not, it ``looks around'' and its attention spreads out.
+If this is right, the Shannon entropy of attention rows should be higher when the model hallucinates, and a classifier that sees only entropy should detect hallucination.
+
+{\bf Is attention actually more diffuse when a model hallucinates?}
+Existing attention-based detectors do not answer this question, because they use other statistics.
+Lookback Lens uses the ratio of attention on context versus generated tokens \citep{chuang2024lookback}, LLM-Check uses attention-kernel scores \citep{sriramanan2024llmcheck}, and \citet{yuksekgonul2024attention} use attention mass on constraint tokens.
+Other single-pass detectors probe hidden states \citep{azaria2023internal,chen2024inside} or use output-distribution uncertainty \citep{kuhn2023semantic,manakul2023selfcheckgpt}.
+What is missing is a direct, controlled test of raw attention entropy: an effect size by layer, a classifier restricted to entropy, a control for sequence length (entropy is bounded by the log of the number of attended positions), and a breakdown by domain.
+
+We provide this test.
+We fix three quantitative claims before running any model:
+\Hone, mean attention entropy over the final three layers is 15--30\% higher for hallucinated than for factual answers;
+\Htwo, a logistic classifier on layer-wise entropy alone reaches a cross-validated AUROC above 0.75;
+\Hthree, within-domain AUROC is highest for biography and lowest for science.
+We evaluate them on closed-book short-answer QA with two open-weight models, \qwen and \llama, on 7,500 questions drawn evenly from five knowledge domains.
+We compare entropy against length-only, domain-only, and token-likelihood baselines computed from the same forward pass.
+
+The answers are mostly negative.
+\Hone is wrong in sign: pooled over domains, final-three-layer entropy is 18.4\% (\qwen) and 14.7\% (\llama) lower for hallucinated answers, and after adjusting for domain and length the difference shrinks to $-2.1\%$ and $-6.4\%$ (\figref{fig:layer_profile}).
+\Htwo passes on paper, with pooled AUROC of 0.827 and 0.817, but knowing only the domain of a question already gives 0.785 and 0.723; classifiers trained inside a single domain average 0.753 and 0.765 and range from 0.62 to 0.89.
+\Hthree is half right: science is the hardest domain in both models, but biography is third of five.
+A token-likelihood baseline beats layer-wise entropy by 0.049 and 0.062 AUROC, and adding entropy to it gains only 0.015 and 0.012.
+
+Our contributions are as follows:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We test three pre-specified claims about attention entropy and hallucination on two model families and five knowledge domains, and report every deviation from the plan.
+    \item We show that late-layer attention entropy is slightly lower, not higher, for hallucinated short answers, and that the sign of the difference flips between early-to-middle and upper layers.
+    \item We show that pooled AUROC overstates the detector: a domain indicator alone recovers most of the gap between chance and the pooled entropy classifier, so we recommend a domain-only baseline and within-domain results for mixed-domain evaluations.
+    \item We compare entropy against a token-likelihood baseline and per-head features, and find that averaging entropy over heads discards most of the usable attention signal.
+\end{itemize}
+
+We review related work in \secref{sec:related}, describe the setup in \secref{sec:method}, report results in \secref{sec:results}, and discuss interpretation and limitations in \secref{sec:discussion}.

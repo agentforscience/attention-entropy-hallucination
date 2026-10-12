@@ -1,0 +1,9 @@
+Attention maps come for free in a single forward pass, which makes them an attractive signal for detecting hallucination.
+A common intuition is that a model lacking the relevant fact attends more diffusely, so its attention entropy rises.
+We test this intuition directly with three pre-specified claims: late-layer attention entropy is 15--30\% higher for hallucinated answers, a logistic classifier on layer-wise entropy alone reaches AUROC above 0.75, and detection is best for biography and worst for science.
+We run \qwen and \llama on 7,500 closed-book questions from five knowledge domains, with length and domain controls and a token-likelihood baseline.
+The first claim is wrong in sign: final-three-layer entropy is 18.4\% and 14.7\% \emph{lower} for hallucinated answers when pooled, and only 2.1\% and 6.4\% lower after we adjust for domain and length.
+The second claim holds only in a confounded setting: the entropy classifier reaches a pooled AUROC of 0.827 and 0.817, but a domain indicator alone reaches 0.785 and 0.723, and classifiers trained within a domain average 0.753 and 0.765.
+The third claim is half right: science is the hardest domain in both models, but biography ranks third of five.
+A token-likelihood baseline from the same forward pass reaches 0.876 and 0.878, and adding entropy to it gains about 0.01 AUROC.
+Layer-wise attention entropy carries a real but weak hallucination signal, and mixed-domain evaluations of such detectors should report a domain-only baseline and within-domain results.

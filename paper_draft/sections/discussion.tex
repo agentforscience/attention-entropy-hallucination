@@ -1,0 +1,55 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\para{The direction of the effect.}
+In the upper layers, attention is slightly \emph{more} concentrated when the answer is wrong, the opposite of the ``looking around'' intuition.
+One possible reading is that when the model lacks the fact, upper-layer heads have less relevant material to integrate and fall back on a few fixed positions, whereas a retrieved fact spreads attention over the subject and relation tokens.
+We did not test this mechanism.
+It is a hypothesis for follow-up work, not a finding.
+
+\para{Why pooled numbers mislead.}
+Domains differ at once in prompt style, in attention entropy, and in the base rate of error.
+Any feature that separates domains will therefore look like a hallucination detector on pooled data.
+In our data a five-way domain indicator reaches 0.72 to 0.79 AUROC with no information about the answer at all.
+We recommend that studies of this kind report a domain-only baseline and a within-domain breakdown by default.
+
+\para{Relation to prior work.}
+Our results agree with the general picture that single-pass internal signals carry correctness information, but that output probabilities are a strong baseline for short-answer QA.
+That per-head features do much better than per-layer averages fits the head-level approach of Lookback Lens \citep{chuang2024lookback}.
+
+\para{Practical implication.}
+Layer-wise attention entropy is not a good stand-alone hallucination detector for short factual answers.
+Token likelihood from the same forward pass is stronger, and entropy adds about 0.01 AUROC on top of it.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+\para{Domain is confounded with dataset.}
+Science and trivia come from different sources than the three \popqa domains, with different question styles and label quality.
+\Hthree comparisons that involve science may reflect \sciq rather than science as a subject.
+
+\para{Label noise.}
+By our 60-example audit, roughly 3--8\% of labels are wrong or debatable, and judge and string match disagree most in science.
+Noise lowers every AUROC and could contribute to the science dip.
+Results agree across all three labelings.
+
+\para{Deviations from the plan.}
+We made several changes after the plan was written, listed in full in \secref{app:deviations}.
+Three matter for interpretation.
+First, the judge is an 8B model rather than the planned 14B model.
+Second, we redefined the primary label as a hybrid of judge and string match after auditing judge errors; we made this choice after seeing provisional string-match-only results but before any judge-based result.
+Third, we added the domain-only control and the within-domain reading of \Htwo after a provisional run exposed the confound, so that part of the analysis is not pre-specified.
+
+\para{Task scope.}
+We study short-answer closed-book QA with answers of a few tokens.
+We did not test long-form generation, summarization, or retrieval-augmented settings, and entropy during generation may behave differently there.
+
+\para{Models.}
+We test two instruction-tuned models of 7--8B parameters and no larger models.
+
+\para{Small factual class.}
+\qwen answers only 88 creative-works questions correctly, so estimates for that domain are wide.
+
+\para{Feature definition.}
+We take entropy over all attended positions, including chat-template and system-prompt tokens, and did not examine entropy restricted to question tokens.
+We fixed classifier regularization at $C=1$ and did not tune it.

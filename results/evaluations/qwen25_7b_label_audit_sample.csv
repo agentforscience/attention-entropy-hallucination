@@ -1,0 +1,61 @@
+qid,domain,question,answer,gold,label
+popqa-1236346,biography,What is Alleppey Vincent's occupation?,Sailor,"['actor', 'actress', 'actors']",HALLUC
+popqa-6055820,biography,What is Tor Aulin's occupation?,Actor,['composer'],HALLUC
+popqa-2083847,biography,What is Kristina Lugn's occupation?,Swedish actress,"['playwright', 'dramatist', 'playwrite']",HALLUC
+popqa-6159486,biography,Who is the father of Isis?,Osiris,"['Geb', 'Seb', 'Keb']",HALLUC
+popqa-5052828,biography,What is Maev-Ann Wren's occupation?,Actress,"['journalist', 'journo', 'journalists']",HALLUC
+popqa-141296,biography,What is Walter Köbel's occupation?,Archaeologist,"['politician', 'political leader', 'political figure']",HALLUC
+popqa-1440910,biography,What is Ayumi Hamasaki's occupation?,Singer,"['actor', 'actress', 'actors']",ok
+popqa-1936428,biography,Who is the father of Yakub A.S in Islam?,Abraham,"['Islamic view of Isaac', 'Isaac in Islam', 'Isḥāq']",ok
+popqa-5086456,biography,Who is the father of Praxedes?,Lucius Praxiteles,['Saint Pudens'],HALLUC
+popqa-276787,biography,What is Scooter Braun's occupation?,Music executive,"['talent manager', 'artist manager', 'band manager']",HALLUC
+popqa-2657379,biography,What is Stevie Cameron's occupation?,Surfer,"['journalist', 'journo', 'journalists']",HALLUC
+popqa-208738,biography,Who is the father of Ma Xiu?,Ma Liang,['Ma Teng'],HALLUC
+popqa-1757112,creative_works,Who was the director of Dedication?,Paul Schrader,"['Justin Theroux', 'Justin Paul Theroux']",HALLUC
+popqa-82380,creative_works,Who was the screenwriter for Superfantozzi?,Yasushi Inoue,['Paolo Villaggio'],HALLUC
+popqa-2085706,creative_works,Who was the screenwriter for The King and I?,Lois Wilson,"['Ernest Lehman', 'Ernest Paul Lehman', 'Oscar Hammerstein II']",HALLUC
+popqa-5025494,creative_works,Who was the composer of Love Story?,Nancy Sinatra,"['Howard Goodall', 'Howard Lindsay Goodall']",HALLUC
+popqa-2292454,creative_works,Who was the composer of For All We Know?,Wendy Carlos,"['Fred Karlin', 'Frederick James Karlin']",HALLUC
+popqa-1001346,creative_works,Who is the author of Neglected Aspects of Sufi Study?,Abdul Wadud,"['Idries Shah', 'Arkon Daraul']",HALLUC
+popqa-3287222,creative_works,Who was the screenwriter for Amistad?,Stephen Spielberg,"['David Franzoni', 'David Harold Franzoni']",HALLUC
+popqa-1349568,creative_works,Who was the producer of About Face?,Gary Goetzman,['Hal Roach'],HALLUC
+popqa-664687,creative_works,Who was the screenwriter for Exposed?,Scott Z. Burns,"['James Toback', 'James Lee Toback']",HALLUC
+popqa-130408,creative_works,Who was the composer of Gentleman?,Andrew Lloyd Webber,"['PSY', 'Park Jae-sang', 'Bak Jae-Sang']",HALLUC
+popqa-3980530,creative_works,Who was the producer of The Room?,Dan Kallman,"['Greg Sestero', 'Gregory Sestero', 'Tommy Wiseau']",HALLUC
+popqa-2485264,creative_works,Who was the screenwriter for Mahjong?,Amy Tan,['Edward Yang'],HALLUC
+popqa-908987,geography,In what country is Geumseong-dong?,South Korea,"['South Korea', 'Republic of Korea', 'ROK']",ok
+popqa-654148,geography,In what country is Yandicoogina mine?,Australia,"['Australia', 'Commonwealth of Australia', 'AU']",ok
+popqa-1213220,geography,What is the capital of County Dublin?,Dublin,"['Dublin', 'Dublin city', 'City of Dublin']",ok
+popqa-13046,geography,What is the capital of Lesotho?,Maseru,['Maseru'],ok
+popqa-2375878,geography,"What is Shibin Al Kawm, Al Minufiyah the capital of?",Al Minufiyah Governorate,['Monufia Governorate'],ok
+popqa-5576523,geography,What is the capital of Maine?,Augusta,"['Le Mans', 'Cenomanensium', 'Croix-Gazonfière']",HALLUC
+popqa-1853198,geography,What is the capital of Brussels Capital Region?,Brussels,"['City of Brussels', 'Brussels City', 'Brussels, Belgium']",ok
+popqa-4775565,geography,In what country is Tire?,Romania,"['Turkey', 'Republic of Turkey', '🇹🇷']",HALLUC
+popqa-774480,geography,What is Laishevo the capital of?,Russia,['Laishevsky District'],HALLUC
+popqa-2496399,geography,In what country is Page?,United States,"['United States of America', 'the United States of America', 'America']",ok
+popqa-2339625,geography,In what country is Nakina railway station?,Canada,"['Canada', 'Dominion of Canada', 'British North America']",ok
+popqa-1391744,geography,What is the capital of Nitra Region?,Nitra,['Nitra'],ok
+sciq-1051,science,What can lenses be used to make?,Camera,['visual representations'],ok
+sciq-9127,science,What is the most useful quantity for counting particles?,Mole,['the mole'],ok
+sciq-4447,science,What is the process of a confined gas escaping through a tiny hole in its container called?,Effusion,['effusion'],ok
+sciq-878,science,Where do the cells in your body get oxygen from?,Lungs,['red blood cells'],HALLUC
+sciq-5814,science,What is the measure of the change in velocity of a moving object called?,Acceleration,['acceleration'],ok
+sciq-1877,science,What measurement is used to describe the amount of water vapor in the air?,Relative humidity,['humidity'],ok
+sciq-6595,science,"What is the term for when gravity pulls soil, mud, and rocks down cliffs and hillsides?",Mass wasting,['mass movement'],ok
+sciq-4717,science,Engaging in relatively simple behaviors helps maintain a nearly constant body temperature for organisms classified as what?,Endotherms,['ectotherms'],HALLUC
+sciq-6560,science,"What type of reaction is a process in which some substances, called reactants, change into different substances, called products?",Chemical reaction,['chemical reaction'],ok
+sciq-726,science,What do red blood cells carry?,Oxygen,['oxygen'],ok
+sciq-9472,science,What kind of reproduction involves just one parent and produces offspring genetically identical to each other and to the parent?,Asexual reproduction,['asexual reproduction'],ok
+sciq-205,science,What two ways may light be transmitted?,Optically and electrically,['refracted or scattered'],HALLUC
+tqa-dpql_3549,trivia,"In ‘Othello’, what is the name of Iago’s wife?",Emilia,"['EMILIA', 'Emilia', 'Emilia (disambiguation)']",ok
+tqa-sfq_24310,trivia,Thomas Cromwell was executed for treason after being blamed for Henry VIII?s failed marriage to whom?,Anne Boleyn,"['ANNE OF CLEVES', 'Flanders mare', 'Anne of cleves']",HALLUC
+tqa-qf_847,trivia,Who wrote 'The Owl and the Pussycat'?,Edward Lear,"['Edward Lear', 'The Jumblies']",ok
+tqa-sfq_7117,trivia,What was the name of the Edinburgh dog that watched over his owner's grave for 14 years?,Greyfriars Bobby,"['Greyfriars Bobby', ""Greyfriar's Bobby"", 'John Gray (Old Jock)']",ok
+tqa-qb_3183,trivia,"In humans, Duane Syndrome affects which part of the body?",Eyes,"['Eye', 'Eye (anatomy)', 'Eye balls']",ok
+tqa-odql_3105,trivia,How is children's author Mary Pollock better known?,Mary Pope Osborne,"['Enid Blyton', 'The Little lose hen', 'Blyton, Enid']",HALLUC
+tqa-sfq_4963,trivia,"Biologically-speaking, what name is given to an organ that serves no evident purpose?",vestigial organ,"['Vestigial', 'Vestigal Structures', 'Vestigal organ']",ok
+tqa-qb_7920,trivia,"Queen Joan of Navarre, who was imprisoned for witchcraft, was the stepmother of which English monarch?",Henry IV,"['Henry V', 'Henry 5', 'Henri V']",HALLUC
+tqa-qw_8577,trivia,"The Sagrada Famlia in Barcelona, which began construction in 1882, was consecrated and declared a basilica by the Pope in what year?",2010,"['2010', 'two thousand and ten']",ok
+tqa-jp_3580,trivia,What island is shared by Haiti and the Dominican Republic?,Hispaniola,"['Hispaniola', 'La Espanola', 'Island of Hispaniola']",ok
+tqa-dpql_1967,trivia,Who co-founded CND with Canon Collins?,Suzanne La Follette,"['Bertrand Russell', 'Human Knowledge: Its Scope and Limits', 'Beacon Hill School (England)']",HALLUC
+tqa-qf_1440,trivia,"Being developed from earlier keyboard instruments, what year was the piano invented?",1700,"['1709', 'one thousand, seven hundred and nine']",HALLUC

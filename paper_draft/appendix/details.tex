@@ -1,0 +1,76 @@
+\section{Implementation details}
+\label{app:details}
+
+\para{System prompt.}
+Both subject models receive the following system prompt:
+\begin{quote}
+\small
+You are a knowledgeable assistant. Answer the question with only the short answer (a name or a few words). Do not explain. Always give your best guess.
+\end{quote}
+
+\para{Models.}
+The subject models are \texttt{Qwen/Qwen2.5-7B-Instruct} and \texttt{unsloth/Meta-Llama-3.1-8B-Instruct}, both in float32 with eager attention.
+The judge is \texttt{Qwen/Qwen3-8B} in bfloat16 with thinking disabled, greedy decoding, and 4 new tokens.
+Mean prompt length is 54 to 64 tokens for \qwen and 76 to 86 tokens for \llama, depending on the domain; mean answer length is 2.5 to 4.0 and 3.4 to 4.4 tokens.
+
+\section{Deviations from the plan}
+\label{app:deviations}
+
+We wrote the analysis plan before running any model. We deviated from it in five ways.
+\begin{enumerate}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{Precision.} Half precision produced NaN attention rows with left-padded batches on \qwen, so we ran both subject models in float32.
+    \item \textbf{Judge model.} The planned judge, \texttt{Qwen2.5-14B-Instruct}, did not fit in memory on the shared GPUs. A 4-bit version was too slow and we stopped it after 128 verdicts. We used \judge instead. On the 128 overlapping items the two judges agree on 123.
+    \item \textbf{Primary label.} An audit of disagreements between judge and string match showed that the 8B judge errs in both directions, for example grading an answer incorrect although it appears verbatim in the gold list. We therefore changed the primary label to a hybrid: correct if a gold alias string-matches or the judge says correct, with a regular-expression abstention rule on top. We made this decision after seeing provisional string-match-only results but before any judge-based result.
+    \item \textbf{Added controls.} We added the domain-only classifier, entropy + domain, and the within-domain AUROC of pooled scores after a provisional run showed that domain identity alone predicts correctness well.
+    \item \textbf{Bootstrap size.} AUROC confidence intervals use 2,000 resamples.
+\end{enumerate}
+
+\section{Additional results}
+\label{app:extra}
+
+\Tabref{tab:labels} repeats the headline numbers under the three labelings, and \tabref{tab:relation} breaks the pooled classifiers down by \popqa relation.
+
+\begin{table}[h]
+    \centering
+    \caption{Label robustness. \emph{Effect} is the pooled relative difference in final-three-layer entropy; \emph{Pooled} and \emph{Within} are the AUROC of the layer-wise entropy classifier trained on pooled data, scored on all data and averaged within domains. Conclusions do not depend on the labeling.}
+    \label{tab:labels}
+    \begin{tabular}{@{}lcccccc@{}}
+        \toprule
+        & \multicolumn{3}{c}{\qwen} & \multicolumn{3}{c}{\llama} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+        \textbf{Labels} & Effect & Pooled & Within & Effect & Pooled & Within \\
+        \midrule
+        hybrid (primary) & $-18.4\%$ & 0.827 & 0.719 & $-14.7\%$ & 0.817 & 0.740 \\
+        judge only & $-17.9\%$ & 0.822 & 0.715 & $-14.2\%$ & 0.809 & 0.728 \\
+        string match only & $-15.3\%$ & 0.793 & 0.716 & $-12.7\%$ & 0.792 & 0.736 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \caption{AUROC by \popqa relation, using out-of-fold scores of the classifiers trained on pooled data. \emph{Rate} is the hallucination rate. A dash marks relations with fewer than 20 examples in the smaller class, which we do not score. The logit baseline is at least as good as entropy on every relation except \emph{author} and \emph{screenwriter} for \qwen.}
+    \label{tab:relation}
+    \begin{tabular}{@{}llcccccc@{}}
+        \toprule
+        & & \multicolumn{3}{c}{\qwen} & \multicolumn{3}{c}{\llama} \\
+        \cmidrule(lr){3-5} \cmidrule(lr){6-8}
+        \textbf{Relation} & \textbf{Domain} & Rate & Entropy & Logit & Rate & Entropy & Logit \\
+        \midrule
+        occupation & biography & 0.72 & 0.746 & 0.764 & 0.56 & 0.675 & 0.772 \\
+        place of birth & biography & 0.87 & 0.666 & 0.793 & 0.79 & 0.684 & 0.798 \\
+        father & biography & 0.72 & 0.656 & 0.821 & 0.56 & 0.761 & 0.863 \\
+        mother & biography & 0.74 & 0.726 & 0.791 & 0.64 & 0.722 & 0.903 \\
+        \midrule
+        country & geography & 0.40 & 0.671 & 0.774 & 0.39 & 0.812 & 0.836 \\
+        capital & geography & 0.24 & 0.851 & 0.893 & 0.16 & 0.843 & 0.912 \\
+        capital of & geography & 0.56 & 0.684 & 0.792 & 0.47 & 0.667 & 0.757 \\
+        \midrule
+        author & creative works & 0.88 & 0.905 & 0.892 & 0.74 & 0.795 & 0.890 \\
+        screenwriter & creative works & 0.94 & 0.876 & 0.868 & 0.80 & 0.785 & 0.885 \\
+        director & creative works & -- & -- & -- & 0.77 & 0.781 & 0.858 \\
+        producer & creative works & -- & -- & -- & 0.90 & 0.765 & 0.896 \\
+        composer & creative works & -- & -- & -- & 0.81 & 0.749 & 0.904 \\
+        \bottomrule
+    \end{tabular}
+\end{table}

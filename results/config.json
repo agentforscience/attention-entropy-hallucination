@@ -1,0 +1,24 @@
+{
+ "seed": 42,
+ "n_per_domain": 1500,
+ "subjects": [
+  "Qwen/Qwen2.5-7B-Instruct",
+  "unsloth/Meta-Llama-3.1-8B-Instruct"
+ ],
+ "judge": "Qwen/Qwen3-8B (bf16, enable_thinking=False, greedy, max_new_tokens=4)",
+ "generation": {
+  "do_sample": false,
+  "max_new_tokens": 24,
+  "dtype": "float32",
+  "attn_implementation": "eager",
+  "batch_size": 16
+ },
+ "classifier": "StandardScaler + LogisticRegression(C=1.0), 5-fold stratified CV x 5 repeats",
+ "bootstrap": {
+  "effect": 10000,
+  "per_domain_effect": 4000,
+  "auroc": 2000
+ },
+ "primary_label": "hybrid: correct if gold alias string-match OR judge CORRECT; abstentions removed",
+ "timestamp": "2026-10-09T14:50:46.465525"
+}

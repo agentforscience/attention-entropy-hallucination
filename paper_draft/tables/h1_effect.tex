@@ -1,0 +1,22 @@
+\begin{table}[t]
+    \centering
+    \caption{\Hone: relative difference in mean final-three-layer attention entropy, hallucinated versus factual, with 95\% bootstrap CIs. Negative values mean lower entropy for hallucinated answers. No estimate comes near the hypothesized $+15\%$ to $+30\%$ band, and the large pooled difference mostly disappears within domains.}
+    \label{tab:h1}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}lcc@{}}
+        \toprule
+        \textbf{Scope} & \qwen & \llama \\
+        \midrule
+        Pooled (confounded by domain) & $-18.4\%$ \ci{$-19.4$}{$-17.3$}, $d=-0.70$ & $-14.7\%$ \ci{$-15.4$}{$-14.0$}, $d=-0.91$ \\
+        \midrule
+        biography & $-0.8\%$ \ci{$-3.5$}{$+1.8$} & $-3.7\%$ \ci{$-5.0$}{$-2.4$} \\
+        geography & $+2.1\%$ \ci{$-0.7$}{$+4.9$} & $-4.5\%$ \ci{$-5.9$}{$-3.0$} \\
+        creative works & $-6.0\%$ \ci{$-11.5$}{$-0.6$} & $-14.1\%$ \ci{$-16.3$}{$-11.9$} \\
+        science & $-2.9\%$ \ci{$-5.4$}{$-0.4$} & $-4.5\%$ \ci{$-5.6$}{$-3.4$} \\
+        trivia & $-9.1\%$ \ci{$-11.7$}{$-6.7$} & $-9.8\%$ \ci{$-11.5$}{$-8.0$} \\
+        \midrule
+        OLS, domain fixed effects + length & $-2.1\%$ \ci{$-3.2$}{$-0.9$} & $-6.4\%$ \ci{$-7.1$}{$-5.7$} \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}

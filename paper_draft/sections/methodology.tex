@@ -1,0 +1,84 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Problem formulation}
+
+We study closed-book short-answer QA.
+A model receives a question $q$ and generates an answer $a$ with no supporting passage.
+We label the answer $y=1$ (\emph{hallucinated}) if it is factually wrong and $y=0$ (\emph{factual}) if it is right, and we drop abstentions.
+Our question is whether the attention entropy the model shows while producing $a$ predicts $y$.
+
+\para{Hypotheses.} We fixed three claims before running any model:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \Hone: mean attention entropy over the final three layers is 15--30\% higher for hallucinated than for factual answers. We count it as supported only if the relative difference and its 95\% CI overlap that band with the right sign.
+    \item \Htwo: logistic regression on layer-wise entropy alone reaches a cross-validated AUROC above 0.75, pooled over domains. We count it as supported if the lower bound of the 95\% CI exceeds 0.75.
+    \item \Hthree: within-domain AUROC is highest for biography and lowest for science.
+\end{itemize}
+
+\subsection{Models and generation}
+
+Attention maps are required, so we use two local open-weight models: \texttt{Qwen2.5-7B-Instruct} (28 layers $\times$ 28 heads; \qwen) and \texttt{Llama-3.1-8B-Instruct} (32 layers $\times$ 32 heads; \llama).
+We run both in float32 with eager attention.
+We generate with greedy decoding and at most 24 new tokens, using each model's chat template and a fixed system prompt that asks for a short answer with no explanation and a best guess (full text in \secref{app:details}).
+
+\subsection{Data and labels}
+
+We sample 1,500 questions per domain, 7,500 in total, with a fixed seed (\tabref{tab:data}).
+Biography, geography, and creative works come from \popqa relations \citep{mallen2023popqa}, science from \sciq \citep{welbl2017sciq}, and trivia from \triviaqa \citep{joshi2017triviaqa}.
+
+\input{tables/data}
+
+\para{Labels.}
+We label an answer factual if a gold alias string-matches the normalized answer or a reference-based LLM judge grades it correct; otherwise we label it hallucinated.
+The judge is \judge with thinking disabled and greedy decoding; it sees the question, the gold answers, and the model answer.
+We drop abstentions, which we identify with a regular-expression rule combined with the judge's verdict.
+This removes 30 examples for \qwen and 50 for \llama, leaving 7,470 and 7,450.
+
+The judge and string match agree on 92.5\% (\qwen) and 92.1\% (\llama) of examples.
+Agreement is lowest in science (76\% and 78\%), where gold answers are free-form phrases.
+In a manual audit of 60 randomly chosen primary labels we found 2 clear errors and 3 debatable cases with an ambiguous question or gold answer.
+We repeat every headline number under judge-only and string-match-only labels.
+
+\subsection{Attention-entropy features}
+
+We run one teacher-forced forward pass over the prompt followed by the generated answer.
+Let $\alpha^{(\ell,h)}_{p,j}$ be the attention weight that head $h$ in layer $\ell$ places from position $p$ on position $j \le p$.
+For every position $p$ that produces an answer token, the attention entropy in nats is
+\begin{equation}
+    H^{(\ell,h)}_p = -\sum_{j \le p} \alpha^{(\ell,h)}_{p,j} \log \alpha^{(\ell,h)}_{p,j}.
+    \label{eq:entropy}
+\end{equation}
+We aggregate over positions in two ways.
+The primary feature, \emph{answer mean}, averages $H^{(\ell,h)}_p$ over all answer-producing positions.
+The \emph{first-token} feature uses only the position that produces the first answer token; it depends on the prompt alone, so it cannot leak answer length.
+A layer feature is the mean over heads, which gives $L=28$ or $32$ features per example.
+The \Hone statistic is the mean of the last three layer features.
+Because $H_p \le \log n_p$ for $n_p$ attended positions, we also compute a length-normalized variant $H_p / \log n_p$.
+
+\subsection{Baselines and controls}
+
+We compare layer-wise entropy against the following feature sets, all fed to the same classifier:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{Domain indicator only}: a one-hot encoding of the five domains. It measures how much a detector gains just from knowing which domain a question comes from.
+    \item \textbf{Length only}: log prompt tokens and log answer tokens.
+    \item \textbf{Logit baseline}: six features from the same forward pass, namely the mean, maximum, and first-token values of token negative log-likelihood and of next-token predictive entropy.
+    \item \textbf{Combinations}: entropy + length, and entropy + logit.
+    \item \textbf{Per-head entropy}: all $L \times H$ head-level entropies (784 or 1,024 features), as an upper bound for entropy-only detectors.
+\end{itemize}
+
+\subsection{Statistics}
+
+\para{Effect sizes.}
+For \Hone we report the relative difference of means, $(\bar{H}_{\text{halluc}} - \bar{H}_{\text{factual}})/\bar{H}_{\text{factual}}$, with a percentile bootstrap CI from 10,000 resamples, together with Cohen's $d$.
+Per layer we run Mann--Whitney $U$ tests with Benjamini--Hochberg correction across layers \citep{benjamini1995fdr}.
+To adjust for confounds we fit an OLS regression of final-three-layer entropy on the hallucination label with domain fixed effects and log prompt and answer length as covariates, using HC3 standard errors.
+
+\para{Classifiers.}
+Every classifier standardizes its features and fits an L2-regularized logistic regression with $C=1$.
+We use 5-fold stratified cross-validation repeated 5 times, with standardization fit inside each fold, and compute AUROC on out-of-fold scores with a 2,000-resample bootstrap CI.
+For \Hthree we train and cross-validate a separate classifier inside each domain, and we also train on one domain and test on another.
+All intervals are 95\%.
+
+\para{Compute.}
+We ran all experiments on four RTX A6000 GPUs (48 GB) shared with other jobs.
+Feature extraction took 24 minutes for \qwen and 28 minutes for \llama at batch size 16, judging took about 30 minutes per model, and each full analysis took about 2 minutes on CPU.

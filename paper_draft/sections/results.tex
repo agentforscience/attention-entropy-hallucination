@@ -1,0 +1,148 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{H1: entropy is lower, not higher, for hallucinated answers}
+\label{sec:h1}
+
+\input{tables/h1_effect}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig1_layer_profile.png}
+    \caption{Attention entropy by layer during answer generation. \textbf{Top:} mean entropy for factual and hallucinated answers, pooled over domains; the shaded band marks the final three layers. \textbf{Bottom:} Cohen's $d$ (hallucinated minus factual), pooled (solid) and averaged over within-domain estimates (dashed). Hallucinated answers have lower entropy in the upper half of both networks. Within domains, the difference is near zero or slightly positive in early-to-middle layers and much smaller than the pooled curve suggests.}
+    \label{fig:layer_profile}
+\end{figure}
+
+\Tabref{tab:h1} reports the relative difference in final-three-layer entropy.
+Pooled over domains, hallucinated answers have 18.4\% lower entropy in \qwen (0.851 versus 1.043 nats) and 14.7\% lower in \llama (0.995 versus 1.166 nats).
+No estimate in either model, pooled or within a domain, comes near the hypothesized $+15\%$ to $+30\%$ band.
+We reject \Hone: the sign is reversed.
+
+{\bf How much of the pooled difference is real?}
+Most of it is a between-domain artifact.
+The \popqa domains have both shorter prompts with lower entropy and far more wrong answers, so pooling mixes a domain difference into the hallucination difference.
+Within domains, the difference ranges from $-14.1\%$ to $+2.1\%$, and two of the ten within-domain intervals include zero (\figref{fig:last3}).
+With domain fixed effects and length covariates, the adjusted difference is $-2.1\%$ \ci{$-3.2$}{$-0.9$} for \qwen and $-6.4\%$ \ci{$-7.1$}{$-5.7$} for \llama.
+The effect is therefore real but small, and it is clearer in \llama than in \qwen.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig2_last3_effect.png}
+    \caption{Relative difference in final-three-layer entropy, hallucinated versus factual, with 95\% CIs, for the answer-mean feature (black) and the first-answer-token feature (gray). The shaded band is the hypothesized $+15\%$ to $+30\%$ range. Every estimate falls outside it, and the first-token feature does not even have a consistent sign across domains.}
+    \label{fig:last3}
+\end{figure}
+
+\para{Robustness.}
+The result does not depend on our analysis choices.
+Length normalization changes nothing material: the pooled difference is $-17.6\%$ and $-14.1\%$.
+Label choice does not matter either: the pooled difference is $-17.9\%$ and $-14.2\%$ with judge-only labels and $-15.3\%$ and $-12.7\%$ with string-match labels.
+The first-token feature is the one variant that behaves differently.
+Its within-domain difference ranges from $-6.2\%$ to $+7.9\%$, with a domain average of $+1.2\%$ for \qwen and $-1.6\%$ for \llama, so at the moment the model starts its answer there is no consistent entropy shift in the final three layers.
+
+\para{Layer profile.}
+\Figref{fig:layer_profile} shows why a single late-layer average is a poor summary.
+Entropy differences are near zero or slightly positive in early-to-middle layers and negative in the upper half of the network.
+In \llama, the within-domain effect peaks at $d \approx +0.3$ around layer 7 and falls to between $-0.3$ and $-0.5$ in the upper layers.
+Pooled, the difference is significant after FDR correction in 28 of 28 layers for \qwen and 30 of 32 for \llama, but this pooled significance inherits the domain confound.
+
+\subsection{H2: pooled AUROC clears 0.75, but mostly for the wrong reason}
+\label{sec:h2}
+
+\input{tables/h2_pooled}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig3_auroc_feature_sets.png}
+    \caption{AUROC by feature set for classifiers trained on pooled data. Black points are pooled AUROC with 95\% CIs; orange diamonds are the mean within-domain AUROC of the same scores; the dashed line is the \Htwo threshold of 0.75. Every pooled number sits well above its within-domain counterpart, and the domain indicator alone clears or approaches the threshold.}
+    \label{fig:auroc_sets}
+\end{figure}
+
+By the pre-specified criterion, \Htwo passes in both models: layer-wise entropy reaches a pooled AUROC of 0.827 \ci{0.817}{0.836} for \qwen and 0.817 \ci{0.807}{0.826} for \llama (\tabref{tab:h2}).
+The result is stable: the standard deviation of AUROC across the five cross-validation repeats is below 0.001.
+
+{\bf Does this number mean what it appears to mean?}
+Not quite.
+A classifier that sees only which of the five domains a question comes from already reaches 0.785 and 0.723, because hallucination rates range from 23\% to 94\% across domains (\tabref{tab:data}) and layer-wise entropy encodes domain.
+Layer-wise entropy beats this domain-only control by $+0.041$ \ci{0.032}{0.051} for \qwen and $+0.093$ \ci{0.082}{0.105} for \llama.
+When we score the same out-of-fold predictions inside each domain, the mean AUROC drops to 0.719 and 0.740 (\figref{fig:auroc_sets}).
+We therefore read \Htwo as mixed: the criterion is met, but most of the margin over chance could be obtained from the domain alone.
+
+\para{The hypothesized feature is weak.}
+The specific statistic in \Hone and \Htwo, the mean entropy of the final three layers, reaches only 0.700 and 0.731 pooled and 0.539 and 0.638 within domain.
+The full layer profile is needed to get a usable detector.
+
+\para{Entropy is not a length artifact.}
+Layer-wise entropy beats the length-only control by $+0.158$ \ci{0.145}{0.170} and $+0.165$ \ci{0.152}{0.178} AUROC.
+Normalizing entropy by $\log n_p$ or adding length features changes pooled AUROC by less than 0.01.
+
+\para{Token likelihood is a stronger signal.}
+The logit baseline reaches 0.876 and 0.878, which is 0.049 \ci{0.040}{0.058} and 0.062 \ci{0.053}{0.070} above layer-wise entropy.
+Adding entropy to the logit baseline gains $+0.015$ \ci{0.010}{0.020} and $+0.012$ \ci{0.009}{0.016}.
+The gain is statistically reliable but small.
+
+\para{Averaging over heads loses signal.}
+Per-head entropy reaches 0.890 and 0.874 pooled and 0.821 and 0.830 within domain, about 0.10 above per-layer entropy within domain and comparable to the logit baseline.
+Most of the usable attention signal lives in individual heads and is lost when we average a layer.
+
+\subsection{H3: science is hardest, but biography is not easiest}
+\label{sec:h3}
+
+\input{tables/h3_domain}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/fig4_auroc_by_domain.png}
+    \caption{Within-domain AUROC with 95\% CIs for layer-wise attention entropy (blue) and the logit baseline (orange). The dashed line marks 0.75. Science is the lowest domain for entropy in both models, and the logit baseline dips there too. Entropy trails the logit baseline most on trivia.}
+    \label{fig:auroc_domain}
+\end{figure}
+
+\Tabref{tab:h3} reports classifiers trained and cross-validated inside each domain.
+Layer-wise entropy averages 0.753 for \qwen and 0.765 for \llama, with a range of 0.616 to 0.892.
+Only geography and creative works exceed 0.75 in both models.
+
+\para{Science is lowest.}
+Science has the lowest AUROC in both models, 0.616 and 0.694.
+The bootstrap probability that science is the lowest domain is 1.00 for \qwen and 0.98 for \llama, and the ordering holds under all three labelings.
+The logit baseline shows the same dip (0.728 and 0.792), so the weakness in science is not specific to attention features (\figref{fig:auroc_domain}).
+
+Combining entropy with the logit baseline raises the within-domain mean from 0.815 to 0.834 for \qwen and from 0.847 to 0.863 for \llama, but the gain is not uniform: on trivia for \qwen the combination (0.839) is below the logit baseline alone (0.853).
+
+\para{Biography is not highest.}
+Biography ranks third of five in both models under the primary labels, behind creative works and geography, and it is never the top domain in any bootstrap resample.
+In \llama, biography and trivia are effectively tied (0.742 versus 0.741), and biography falls to fourth under both alternative labelings.
+Biography does beat science, by $+0.131$ \ci{0.083}{0.176} in \qwen and $+0.048$ \ci{0.009}{0.088} in \llama.
+\Hthree is thus half supported.
+
+\para{Cross-domain transfer.}
+Training on one domain and testing on another gives a mean off-diagonal AUROC of 0.651 for \qwen and 0.682 for \llama, against 0.753 and 0.765 within domain (\figref{fig:transfer}).
+Part of the signal generalizes across domains and part is domain-specific.
+Transfer is uneven: in \qwen, classifiers trained on any other domain reach 0.73 to 0.88 on creative works, while no classifier trained elsewhere exceeds 0.60 on science.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/fig5_transfer.png}
+    \caption{Cross-domain transfer of the layer-wise entropy classifier. Rows are training domains and columns are test domains; the diagonal is within-domain cross-validated AUROC. Off-diagonal cells average 0.651 (\qwen) and 0.682 (\llama), so the signal transfers only partly. Science is the hardest test domain to transfer into in both models.}
+    \label{fig:transfer}
+\end{figure}
+
+\subsection{Error analysis}
+\label{sec:errors}
+
+\para{By relation.}
+Within \popqa, the pooled entropy classifier is strongest on \emph{capital} (0.85 for \qwen, 0.84 for \llama) and, for \qwen, on \emph{author} and \emph{screenwriter} (0.88 to 0.91).
+For \qwen it is weakest on \emph{father}, \emph{place of birth}, \emph{country}, and \emph{capital of} (0.66 to 0.68).
+\Tabref{tab:relation} in the appendix lists all relations.
+
+\para{Missed hallucinations.}
+Misses cluster in science and trivia questions where the model gives a fluent, confident near-miss, such as ``Bone marrow'' for the skeleton, or ``pharaoh'' for the Sphinx's human head.
+These answers often have very low token negative log-likelihood as well, so token likelihood does not flag them either.
+
+\para{False alarms.}
+False alarms are mostly correct answers about obscure \popqa entities, such as the screenwriter of \emph{A Special Day}, where the question looks like the ones the model usually gets wrong.
+
+\para{Label noise.}
+Some apparent misses are label errors: ``Belgium'' for the origin of French fries is graded wrong against the gold answer.
+
+\para{Overlap with token likelihood.}
+Entropy and logit scores are correlated but not redundant, with a within-domain Spearman correlation of 0.33 for \qwen and 0.50 for \llama.
+This is consistent with the small gain from combining them.
